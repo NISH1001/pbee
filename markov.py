@@ -30,6 +30,7 @@ class MarkovChain:
             if len(tokens) > self.lookback:
                 for i in range(len(tokens) + 1):
                     a = ' '.join(tokens[max(0, i-self.lookback) : i])
+                    print(a)
                     b = ' '.join(tokens[i : i+1])
                     self.trie[a][b] += 1
         print("Total number of individual log :: {}".format(counter))
@@ -61,6 +62,16 @@ class MarkovChain:
             next_word = self._sample(self.trie[' '.join(sentence[-self.lookback:])].items())
         return sentence
 
+    def generate_interactive(self):
+        inp = ''
+        res = []
+        while inp!= 'quit':
+            print(res)
+            inp = input("Enter command : ")
+            res.extend(inp.split())
+            next_token = self.trie[' '.join(res)]
+            print(next_token)
+
 def load_data(filename):
     lines = []
     with open(filename) as f:
@@ -73,13 +84,14 @@ def load_data(filename):
 
 def main():
     data = load_data("data/log")
-    mc = MarkovChain(lookback=5)
+    mc = MarkovChain(lookback=3)
     mc.train(data)
 
-    print(mc.trie['cd Nish / programming'])
+    print(mc.trie['cd Nish /'])
     command = 'git push'
-    command = 'cd Nish / stuff'
-    completed = mc.generate(command)
+    command = 'cd Nish /'
+    # completed = mc.generate(command)
+    completed = mc.generate_interactive()
     print(completed)
 
 
