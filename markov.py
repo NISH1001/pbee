@@ -28,10 +28,11 @@ class MarkovChain:
                 continue
             counter += 1
             if len(tokens) > self.lookback:
+                print(tokens)
                 for i in range(len(tokens) + 1):
                     a = ' '.join(tokens[max(0, i-self.lookback) : i])
-                    print(a)
                     b = ' '.join(tokens[i : i+1])
+                    print("a :: {} || b :: {}".format(a, b))
                     self.trie[a][b] += 1
         print("Total number of individual log :: {}".format(counter))
         self._build_probabilities()
@@ -66,11 +67,12 @@ class MarkovChain:
         inp = ''
         res = []
         while inp!= 'quit':
-            print(res)
             inp = input("Enter command : ")
             res.extend(inp.split())
-            next_token = self.trie[' '.join(res)]
-            print(next_token)
+            r = res[-3:] if len(res)>3 else res
+            next_token = self.trie[' '.join(r)]
+            print("Current sequence :: {}".format(r))
+            print("Next token :: {}".format(next_token))
 
 def load_data(filename):
     lines = []
@@ -87,7 +89,8 @@ def main():
     mc = MarkovChain(lookback=3)
     mc.train(data)
 
-    print(mc.trie['cd Nish /'])
+    print("here")
+    print("here")
     command = 'git push'
     command = 'cd Nish /'
     # completed = mc.generate(command)
