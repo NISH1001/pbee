@@ -69,10 +69,11 @@ class MarkovChain:
         while inp!= 'quit':
             inp = input("Enter command : ")
             res.extend(inp.split())
-            r = res[-3:] if len(res)>3 else res
+            r = res[-self.lookback:]
             next_token = self.trie[' '.join(r)]
             print("Current sequence :: {}".format(r))
-            print("Next token :: {}".format(next_token))
+            print("Next token :: {}".format(dict(next_token)))
+        return res
 
 def load_data(filename):
     lines = []
@@ -86,7 +87,7 @@ def load_data(filename):
 
 def main():
     data = load_data("data/log")
-    mc = MarkovChain(lookback=3)
+    mc = MarkovChain(lookback=5)
     mc.train(data)
 
     print("here")
